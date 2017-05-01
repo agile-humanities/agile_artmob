@@ -1,0 +1,6 @@
+name = Agile Artmob
+description = Artmob fair use suite
+package = Agile Humanities
+dependencies[] = date_fields
+dependencies[] = date
+core = 7.x

@@ -1,0 +1,95 @@
+<?php
+
+function agile_artmob_menu() {
+  $items['artmob/visualizations'] = array(
+    'title' => 'Visualizations',
+    'description' => 'Artmob Visualizations',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'show_visualizations',
+    'file' => 'includes/artmob_show_pages.inc',
+    'access arguments' => array('access content'),
+  );
+  $items['artmob/citation/%node'] = array(
+    'title' => 'Citation add',
+    'description' => 'Add citation to Artmob Node',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'agile_artmob_attach_citation',
+    'page arguments' => array(2),
+    'file' => 'includes/utilities.inc',
+    'access arguments' => array('access content'),
+  );
+  $items['node/%node/citations'] = array(
+    'title' => 'Citations',
+    'page callback' => 'agile_artmob_citations',
+    'page arguments' => array(1),
+    'access callback' => 'agile_artmob_access_node',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'includes/citations.inc',
+  );
+  $items['artmob/attribute/%node'] = array(
+    'title' => 'attribute add',
+    'description' => 'Add attribute to Artmob Node',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'agile_artmob_attach_attribute',
+    'page arguments' => array(2),
+    'file' => 'includes/utilities.inc',
+    'access arguments' => array('access content'),
+  );
+  $items['node/%node/attributes'] = array(
+    'title' => 'Attributes',
+    'page callback' => 'agile_artmob_attributes',
+    'page arguments' => array(1),
+    'access callback' => 'agile_artmob_access_node',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'includes/attributes.inc',
+  );
+  return $items;
+}
+
+function agile_artmob_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['artmob_visualization'] = array(
+    'template' => 'theme/artmob_visualization',
+    'file' => 'theme/theme.inc',
+  );
+  $theme['node__citations'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--citations',
+    'path' => drupal_get_path('module', 'agile_artmob') . '/theme',
+  );
+  return $theme;
+}
+
+function agile_artmob_preprocess_node(&$variables) {
+  module_load_include('inc', 'agile_artmob', 'theme/theme');
+  if ('mods_image' == $variables['type']) {
+    preprocess_mods_image($variables);
+  }
+  if ('citations' == $variables['type']) {
+    preprocess_citations($variables);
+  }
+}
+
+/**
+ * Access for submenu items.
+ *
+ * @param string $package_name
+ *   Name of the package
+ *
+ * @return bool
+ *   Access granted
+ */
+function agile_artmob_access_node($node) {
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $bundle = $wrapper->getBundle();
+  $results = db_query("SELECT count(*) FROM {islandora_sync_type_cmodel} WHERE bundle = :bundle", array(':bundle' => $bundle)
+      )->fetchCol();
+  $included_bundles = array(
+    'mods_image',
+    'drupal_fedora_pdf',
+  );
+  return ($results[0]) && user_access('access content');
+}

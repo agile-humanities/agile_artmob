@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Artmob Features feature.
+ */
+
+include_once 'artmob_features.features.inc';
