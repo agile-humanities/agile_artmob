@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Creates virtually empty citation to be completed by user.
  *
@@ -8,9 +7,11 @@
  *   Parent node to which citation is attached.
  */
 function agile_artmob_attach_citation($node) {
+  global $user;
   $title = $node->title;
   $entity = entity_create('node', array('type' => 'citations'));
   $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->author = $user->uid;
   $wrapper->field_is_citation_of->set($node);
   $wrapper->title->set("Citation for $title");
   $wrapper->save();
@@ -50,9 +51,11 @@ function artmob_get_citations($target_id) {
  *   Parent node to which attribution is attached.
  */
 function agile_artmob_attach_attribute($node) {
+  global $user;
   $title = $node->title;
   $entity = entity_create('node', array('type' => 'attribute'));
   $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->author = $user->uid;
   $info = $wrapper->getPropertyInfo();
   $wrapper->field_is_attribution_of->set($node);
   $wrapper->title->set("Attribute for $title");
@@ -72,7 +75,7 @@ function agile_artmob_attach_attribute($node) {
 function artmob_get_attributes($target_id) {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'attributes')
+      ->entityCondition('bundle', 'attribute')
       ->propertyCondition('status', NODE_PUBLISHED)
       ->fieldCondition('field_is_attribution_of', 'target_id', $target_id)
       // Run the query as user 1.
