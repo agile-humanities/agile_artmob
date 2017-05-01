@@ -53,7 +53,7 @@ function artmob_get_citations($target_id) {
 function agile_artmob_attach_attribute($node) {
   global $user;
   $title = $node->title;
-  $entity = entity_create('node', array('type' => 'attributes'));
+  $entity = entity_create('node', array('type' => 'attribute'));
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->author = $user->uid;
   $info = $wrapper->getPropertyInfo();
