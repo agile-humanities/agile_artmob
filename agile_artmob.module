@@ -45,6 +45,15 @@ function agile_artmob_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'includes/attributes.inc',
   );
+  $items['node/%node/licence'] = array(
+    'title' => 'Licence',
+    'page callback' => 'agile_artmob_license',
+    'page arguments' => array(1),
+    'access callback' => 'agile_artmob_access_node',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'includes/license.inc',
+  );
   return $items;
 }
 
