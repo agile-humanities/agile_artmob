@@ -54,6 +54,24 @@ function agile_artmob_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'includes/license.inc',
   );
+  $items['node/%node/discussion'] = array(
+    'title' => 'Discussion',
+    'page callback' => 'agile_artmob_discussions',
+    'page arguments' => array(1),
+    'access callback' => 'agile_artmob_access_node',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'includes/discussions.inc',
+  );
+  $items['artmob/discussion/%node'] = array(
+    'title' => 'discussion add',
+    'description' => 'Add discussion to Artmob Node',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'agile_artmob_attach_discussion',
+    'page arguments' => array(2),
+    'file' => 'includes/utilities.inc',
+    'access arguments' => array('access content'),
+  );
   return $items;
 }
 

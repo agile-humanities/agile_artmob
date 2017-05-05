@@ -88,3 +88,48 @@ function artmob_get_attributes($target_id) {
   }
   return $attribute_nids;
 }
+
+/**
+ * Gets all discussions associated with node.
+ *
+ * @param integer PID of parent node
+ * 
+ * @return array
+ *   nids of all attached discussions
+ */
+function artmob_get_discussions($target_id) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'discussion')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_is_discussion_of', 'target_id', $target_id)
+      // Run the query as user 1.
+      ->addMetaData('account', user_load(1));
+
+  $result = $query->execute();
+  $discussion_nids = array();
+  if (isset($result['node'])) {
+    $discussion_nids = array_keys($result['node']);
+  }
+  return $discussion_nids;
+}
+
+/**
+ * Creates virtually empty discussion to be completed by user.
+ *
+ * @param node $node
+ *   Parent node to which attribution is attached.
+ */
+function agile_artmob_attach_discussion($node) {
+  global $user;
+  $title = $node->title;
+  $entity = entity_create('node', array('type' => 'discussion'));
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->author = $user->uid;
+  $info = $wrapper->getPropertyInfo();
+  $wrapper->field_is_discussion_of->set($node);
+  $wrapper->title->set("discussion for $title");
+  $wrapper->save();
+  $nid = $wrapper->nid->value();
+  drupal_goto("/node/$nid/edit");
+}
