@@ -54,6 +54,15 @@ function agile_artmob_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'includes/license.inc',
   );
+  $items['artmob/license/%node'] = array(
+    'title' => 'license add',
+    'description' => 'Add license to Artmob Node',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'agile_artmob_attach_license',
+    'page arguments' => array(2),
+    'file' => 'includes/utilities.inc',
+    'access arguments' => array('access content'),
+  );
   $items['node/%node/discussion'] = array(
     'title' => 'Discussion',
     'page callback' => 'agile_artmob_discussions',

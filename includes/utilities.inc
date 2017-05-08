@@ -19,30 +19,7 @@ function agile_artmob_attach_citation($node) {
   drupal_goto("/node/$nid/edit");
 }
 
-/**
- * Gets all citations associated with node.
- *
- * @param integer PID of parent node
- * 
- * @return array
- *   nids of all attached citations
- */
-function artmob_get_citations($target_id) {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'citations')
-      ->propertyCondition('status', NODE_PUBLISHED)
-      ->fieldCondition('field_is_citation_of', 'target_id', $target_id)
-      // Run the query as user 1.
-      ->addMetaData('account', user_load(1));
 
-  $result = $query->execute();
-  $citation_nids = array();
-  if (isset($result['node'])) {
-    $citation_nids = array_keys($result['node']);
-  }
-  return $citation_nids;
-}
 
 /**
  * Creates virtually empty attribution to be completed by user.
@@ -65,53 +42,22 @@ function agile_artmob_attach_attribute($node) {
 }
 
 /**
- * Gets all attributions associated with node.
+ * Creates virtually empty citation to be completed by user.
  *
- * @param integer PID of parent node
- * 
- * @return array
- *   nids of all attached attributions
+ * @param node $node
+ *   Parent node to which citation is attached.
  */
-function artmob_get_attributes($target_id) {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'attribute')
-      ->propertyCondition('status', NODE_PUBLISHED)
-      ->fieldCondition('field_is_attribution_of', 'target_id', $target_id)
-      // Run the query as user 1.
-      ->addMetaData('account', user_load(1));
-
-  $result = $query->execute();
-  $attribute_nids = array();
-  if (isset($result['node'])) {
-    $attribute_nids = array_keys($result['node']);
-  }
-  return $attribute_nids;
-}
-
-/**
- * Gets all discussions associated with node.
- *
- * @param integer PID of parent node
- * 
- * @return array
- *   nids of all attached discussions
- */
-function artmob_get_discussions($target_id) {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'discussion')
-      ->propertyCondition('status', NODE_PUBLISHED)
-      ->fieldCondition('field_is_discussion_of', 'target_id', $target_id)
-      // Run the query as user 1.
-      ->addMetaData('account', user_load(1));
-
-  $result = $query->execute();
-  $discussion_nids = array();
-  if (isset($result['node'])) {
-    $discussion_nids = array_keys($result['node']);
-  }
-  return $discussion_nids;
+function agile_artmob_attach_license($node) {
+  global $user;
+  $title = $node->title;
+  $entity = entity_create('node', array('type' => 'assigned_licenses'));
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->author = $user->uid;
+  $wrapper->field_licensed_asset->set($node);
+  $wrapper->title->set("License for $title");
+  $wrapper->save();
+  $nid = $wrapper->nid->value();
+  drupal_goto("/node/$nid/edit");
 }
 
 /**
@@ -132,4 +78,29 @@ function agile_artmob_attach_discussion($node) {
   $wrapper->save();
   $nid = $wrapper->nid->value();
   drupal_goto("/node/$nid/edit");
+}
+
+/**
+ * Gets all assets associated with node.
+ *
+ * @param integer PID of parent node
+ * 
+ * @return array
+ *   nids of all attached assets
+ */
+function artmob_get_attached($target_id, $bundle_type, $field) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', $bundle_type)
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition($field, 'target_id', $target_id)
+      // Run the query as user 1.
+      ->addMetaData('account', user_load(1));
+
+  $result = $query->execute();
+  $nids = array();
+  if (isset($result['node'])) {
+    $nids = array_keys($result['node']);
+  }
+  return $nids;
 }

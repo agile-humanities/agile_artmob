@@ -5,7 +5,7 @@ function agile_artmob_citations($node) {
   drupal_add_css("$path/css/artmob_custom.css");
   module_load_include('inc', 'agile_artmob', 'includes/utilities');
   $nid = $node->nid;
-  $citations = artmob_get_citations($nid);
+  $citations = artmob_get_attached($nid, 'citations', 'field_is_citation_of');
   $link = l(t('Add new citation'), "artmob/citation/$nid", array('attributes' => array('class' => 'buttonize')));
   $output = t('No citations found.');
   $output = "<p>$output</p>";

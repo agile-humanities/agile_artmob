@@ -5,7 +5,7 @@ function agile_artmob_discussions($node) {
   drupal_add_css("$path/css/artmob_custom.css");
   module_load_include('inc', 'agile_artmob', 'includes/utilities');
   $nid = $node->nid;
-  $discussions = artmob_get_discussions($nid);
+  $discussions = artmob_get_attached($nid, 'discussion', 'field_is_discussion_of');
   $link = l(t('Add new discussion'), "artmob/discussion/$nid", array('attributes' => array('class' => 'buttonize')));
   $output = t('No discussions found.');
   $output = "<p>$output</p>";
