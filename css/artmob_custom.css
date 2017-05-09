@@ -13,4 +13,6 @@ and open the template in the editor.
     -moz-appearance: button;
     appearance: button;
     padding: .5em;
+    width : 145px;
+    text-align: center;
 }

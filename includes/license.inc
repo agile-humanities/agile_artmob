@@ -22,7 +22,8 @@ function agile_artmob_license($node) {
   module_load_include('inc', 'agile_artmob', 'includes/utilities');
   $nid = $node->nid;
   $licenses = artmob_get_attached($nid, 'assigned_licenses', 'field_licensed_asset');
-  $link = l(t('Add license'), "artmob/license/$nid", array('attributes' => array('class' => 'buttonize')));
+  $link = l(t('Assign license'), "artmob/license/$nid", array('attributes' => array('class' => 'buttonize')));
+
   $modify_link = l(t('Change license'), "artmob/license/$nid", array('attributes' => array('class' => 'buttonize')));
   $output = t('No license assigned.');
   $output = "<p>$output</p>";
@@ -33,5 +34,6 @@ function agile_artmob_license($node) {
     $view = node_view($node);
     $output .= drupal_render($view);
   }
-  return $link . $output;
+  $new_license = l(t('Add new license type'), "node/add/licences", array('attributes' => array('class' => 'buttonize')));
+  return $link .$new_license . $output;
 }
