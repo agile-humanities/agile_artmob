@@ -1,5 +1,12 @@
 <?php
+/**
+ * @file
+ * This file contains installation logic.
+ */
 
+/**
+ * Implements hook_install().
+ */
 function agile_artmob_install() {
   db_query("INSERT INTO {am_work_type} (`work_type_id`, `work_type`, `work_sub_type`) VALUES
 				('Aa', 'Literary Work', NULL),

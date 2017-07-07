@@ -1,21 +1,18 @@
 <?php
+/**
+ * @file
+ * This file contains all license functions.
+ */
 
-function agile_artmob_licensex($node) {
-  $path = drupal_get_path('module', 'agile_artmob');
-  drupal_add_css("$path/css/artmob_custom.css");
-  module_load_include('inc', 'agile_artmob', 'includes/utilities');
-  $wrapper = entity_metadata_wrapper('node', $node);
-  $license = $wrapper->field_license->value();
-  $link = l(t('Add license type'), "admin/structure/taxonomy/licenses/add", array('attributes' => array('class' => 'buttonize')));
-  $link = "<p>$link</p>";
-  $output = t('There is no license associated with this asset.');
-  if (isset($license)) {
-    $output = "<h2>{$license->name}</h2>";
-    $output .= "<p>{$license->description}</p>";
-  }
-  return $link . $output;
-}
-
+/**
+ * Discussions callback.
+ *
+ * @param node $node
+ *   Node with licenses attached.
+ *
+ * @return HTML
+ *   License HTML
+ */
 function agile_artmob_license($node) {
   $path = drupal_get_path('module', 'agile_artmob');
   drupal_add_css("$path/css/artmob_custom.css");
@@ -35,5 +32,5 @@ function agile_artmob_license($node) {
     $output .= drupal_render($view);
   }
   $new_license = l(t('Add new license type'), "node/add/licences", array('attributes' => array('class' => 'buttonize')));
-  return $link .$new_license . $output;
+  return $link . $new_license . $output;
 }

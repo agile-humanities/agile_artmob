@@ -1,12 +1,20 @@
 <?php
 
+/**
+ * @file
+ * This file contains module hooks.
+ */
+
+/**
+ * Implements hook_menu().
+ */
 function agile_artmob_menu() {
   $items['artmob/visualizations'] = array(
     'title' => 'Visualizations',
     'description' => 'Artmob Visualizations',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'show_visualizations',
-    'file' => 'includes/artmob_show_pages.inc',
+    'file' => 'includes/utilities.inc',
     'access arguments' => array('access content'),
   );
   $items['artmob/citation/%node'] = array(
@@ -84,6 +92,9 @@ function agile_artmob_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_theme().
+ */
 function agile_artmob_theme($existing, $type, $theme, $path) {
   $theme = array();
   $theme['artmob_visualization'] = array(
@@ -99,6 +110,9 @@ function agile_artmob_theme($existing, $type, $theme, $path) {
   return $theme;
 }
 
+/**
+ * Implements hook_preprocess().
+ */
 function agile_artmob_preprocess_node(&$variables) {
   module_load_include('inc', 'agile_artmob', 'theme/theme');
   if ('mods_image' == $variables['type']) {
@@ -112,8 +126,8 @@ function agile_artmob_preprocess_node(&$variables) {
 /**
  * Access for submenu items.
  *
- * @param string $package_name
- *   Name of the package
+ * @param node $node
+ *   Node being accessed
  *
  * @return bool
  *   Access granted

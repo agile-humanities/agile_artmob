@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * This file contains all theme and preprocess functions.
+ */
+
+/**
  * Creates virtually empty citation to be completed by user.
  *
  * @param node $node
@@ -18,8 +23,6 @@ function agile_artmob_attach_citation($node) {
   $nid = $wrapper->nid->value();
   drupal_goto("/node/$nid/edit");
 }
-
-
 
 /**
  * Creates virtually empty attribution to be completed by user.
@@ -42,7 +45,7 @@ function agile_artmob_attach_attribute($node) {
 }
 
 /**
- * Creates virtually empty citation to be completed by user.
+ * Creates virtually empty license to be completed by user.
  *
  * @param node $node
  *   Parent node to which citation is attached.
@@ -81,12 +84,17 @@ function agile_artmob_attach_discussion($node) {
 }
 
 /**
- * Gets all assets associated with node.
+ * Get attached assets.
  *
- * @param integer PID of parent node
- * 
+ * @param string $target_id
+ *   NID of target
+ * @param string $bundle_type
+ *   Bundle name
+ * @param string $field
+ *   Field name
+ *
  * @return array
- *   nids of all attached assets
+ *   Associated NIDs
  */
 function artmob_get_attached($target_id, $bundle_type, $field) {
   $query = new EntityFieldQuery();
@@ -103,4 +111,14 @@ function artmob_get_attached($target_id, $bundle_type, $field) {
     $nids = array_keys($result['node']);
   }
   return $nids;
+}
+
+/**
+ * Callback to show visualiztions.
+ *
+ * @return html
+ *   Visualization HTML
+ */
+function show_visualizations() {
+  return theme('artmob_visualization', array());
 }

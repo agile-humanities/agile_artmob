@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * @file
+ * Form definition to add new citations.
+ */
+
+/**
+ * Add citation form.
+ *
+ * @param array $form
+ *   Drupal Form
+ * @param array $form_state
+ *   Drupal Form State
+ *
+ * @return array
+ *   The drupal form definition.
+ */
 function artmob_citation_form($form, $form_state, $parent_node) {
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
 
@@ -38,11 +54,5 @@ function artmob_citation_form($form, $form_state, $parent_node) {
     '#title' => t('Add Date'),
     '#type' => 'date_fields',
   );
-  
-  
-  
-  
-  
-  
   return $form;
 }

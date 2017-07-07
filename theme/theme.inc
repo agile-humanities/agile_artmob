@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file
+ * This file contains all theme and preprocess functions.
+ */
+
+/**
+ * Implements hook_preprocess_theme().
+ */
 function agile_artmob_preprocess_artmob_visualization(&$variables) {
   $module_path = drupal_get_path('module', 'agile_artmob');
   drupal_add_js("$module_path/js/agile_artmob.js");
@@ -9,6 +17,9 @@ function agile_artmob_preprocess_artmob_visualization(&$variables) {
   drupal_add_js("$module_path/js/fairdealing_visualizations.js");
 }
 
+/**
+ * Implements hook_preprocess_theme().
+ */
 function preprocess_mods_image(&$variables) {
   module_load_include('inc', 'agile_artmob', 'includes/db');
   $node = $variables['node'];
@@ -27,6 +38,9 @@ function preprocess_mods_image(&$variables) {
 
 }
 
+/**
+ * Implements hook_preprocess_theme().
+ */
 function preprocess_citations(&$variables) {
   $path = drupal_get_path('module', 'agile_artmob');
   drupal_add_css("$path/css/artmob_custom.css");
