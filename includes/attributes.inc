@@ -26,7 +26,7 @@ function agile_artmob_attributes($node) {
     $output = '';
     foreach ($attributes as $attribute) {
       $node = node_load($attribute);
-      if (is_array($node->body) && $node->body) {
+      if (isset($node->body) && $node->body) {
         $view = node_view($node, 'teaser');
         $output .= drupal_render($view);
       }

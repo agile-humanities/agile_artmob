@@ -26,7 +26,7 @@ function agile_artmob_citations($node) {
     $output = '';
     foreach ($citations as $citation) {
       $node = node_load($citation);
-      if (is_array($node->body) && $node->body) {
+      if (isset($node->body) && $node->body) {
         $view = node_view($node, 'teaser');
         $output .= drupal_render($view);
       }
